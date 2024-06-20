@@ -12,7 +12,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:3000",
-      //   "https://employee-management-topaz.vercel.app",
+      "https://store-frontend-three-ochre.vercel.app",
     ],
   })
 );
