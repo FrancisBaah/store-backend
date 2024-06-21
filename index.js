@@ -23,6 +23,7 @@ app.use(express.json());
 app.use("/uploads", express.static("uploads"));
 
 app.use("/products", router);
+app.use("/user", require("./Routes/UserRoute"));
 app.use(errorHandler);
 
 app.listen(PORT, () => console.log(`listenin on port ${PORT}`));
