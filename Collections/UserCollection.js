@@ -76,6 +76,30 @@ const getAllUsers = asyncHandler(async (req, res) => {
   res.status(200).json(users);
 });
 
+const UpdateUser = asyncHandler(async (req, res) => {
+  const { name, email, role } = req.body;
+  const updateUser = await User.findByIdAndUpdate(
+    req.params.id,
+    { name, email, role },
+    { new: true }
+  );
+  if (!updateUser) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  res.status(200).json(updateUser);
+});
+
+const deleteUser = asyncHandler(async (req, res) => {
+  const user = await User.findById(req.params.id);
+  if (!user) {
+    res.status(404);
+    throw new Error("User not found");
+  }
+  await user.deleteOne();
+  res.status(200).json({ message: "User deleted successfully" });
+});
+
 // Generate JWT
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -88,4 +112,6 @@ module.exports = {
   loginUser,
   getUser,
   getAllUsers,
+  UpdateUser,
+  deleteUser,
 };
