@@ -1,8 +1,12 @@
+const { message } = require("antd");
 const asyncHandler = require("express-async-handler");
 const stripe = require("stripe")(process.env.STRIPE_SECRET_KEY);
 
 const handleStipe = asyncHandler(async (req, res) => {
   const { amount } = req.body;
+  if (!amount) {
+    res.status(400).json({ message: "amount not added" });
+  }
 
   try {
     // Create PaymentIntent with payment_method_types and amount
