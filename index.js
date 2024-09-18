@@ -15,6 +15,7 @@ app.use(
       "http://localhost:3000",
       "https://store-frontend-three-ochre.vercel.app",
     ],
+    credentials: true, // Allow credentials (cookies)
   })
 );
 app.use(express.urlencoded({ extended: false }));
