@@ -32,12 +32,21 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
+    const token = generateToken(user._id);
+
+    // Set token as HTTP-only cookie
+    res.cookie("token", token, {
+      httpOnly: true, // Secure cookie (prevents JavaScript access)
+      secure: process.env.NODE_ENV === "production", // Set only on HTTPS
+      sameSite: "strict", // Prevents CSRF
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    });
+
     res.status(201).json({
       _id: user.id,
       name: user.name,
       email: user.email,
       role: user.role,
-      token: generateToken(user._id),
     });
   } else {
     res.status(400);
@@ -51,18 +60,38 @@ const loginUser = asyncHandler(async (req, res) => {
   // Check for user email
   const user = await User.findOne({ email });
   if (user && (await bcrypt.compare(password, user.password))) {
+    const token = generateToken(user._id);
+
+    // Set token as HTTP-only cookie
+    res.cookie("token", token, {
+      httpOnly: true, // Secure cookie (prevents JavaScript access)
+      secure: process.env.NODE_ENV === "production", // Set only on HTTPS
+      sameSite: "strict", // Prevents CSRF
+      maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
+    });
+
     res.json({
       _id: user.id,
       name: user.name,
       email: user.email,
       role: user.role,
-      token: generateToken(user._id),
     });
   } else {
     res.status(400);
     throw new Error("Invalid credentials");
   }
 });
+const logoutUser = (req, res) => {
+  // Clear the cookie by setting an empty value and an immediate expiration date
+  res.cookie("token", "", {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    sameSite: "strict",
+    expires: new Date(0), // Set the expiration to a past date to delete the cookie
+  });
+
+  res.status(200).json({ message: "Logged out successfully" });
+};
 
 //   Get user data
 // @access  Private
@@ -114,4 +143,5 @@ module.exports = {
   getAllUsers,
   UpdateUser,
   deleteUser,
+  logoutUser,
 };
