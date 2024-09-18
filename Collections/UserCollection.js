@@ -37,8 +37,10 @@ const registerUser = asyncHandler(async (req, res) => {
     // Set token as HTTP-only cookie
     res.cookie("token", token, {
       httpOnly: true, // Secure cookie (prevents JavaScript access)
-      secure: process.env.NODE_ENV === "production", // Set only on HTTPS
-      sameSite: "strict", // Prevents CSRF
+      secure: true, // Must be true if using SameSite=None
+      sameSite: "None",
+      // secure: process.env.NODE_ENV === "production", // Set only on HTTPS
+      // sameSite: "strict", // Prevents CSRF
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
 
@@ -65,8 +67,8 @@ const loginUser = asyncHandler(async (req, res) => {
     // Set token as HTTP-only cookie
     res.cookie("token", token, {
       httpOnly: true, // Secure cookie (prevents JavaScript access)
-      secure: process.env.NODE_ENV === "production", // Set only on HTTPS
-      sameSite: "strict", // Prevents CSRF
+      secure: true, // Must be true if using SameSite=None
+      sameSite: "None",
       maxAge: 30 * 24 * 60 * 60 * 1000, // 30 days
     });
 
