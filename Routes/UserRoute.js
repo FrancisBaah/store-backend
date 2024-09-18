@@ -12,10 +12,10 @@ const { protect } = require("../Middleware/AuthHandler");
 const router = express.Router();
 
 router.post("/", registerUser);
-router.get("/all", getAllUsers);
+router.get("/all", protect, getAllUsers);
 router.post("/login", loginUser);
 router.post("/logout", logoutUser);
 router.get("/", protect, getUser);
-router.route("/:id").put(UpdateUser).delete(deleteUser);
+router.route("/:id", protect).put(UpdateUser).delete(deleteUser);
 
 module.exports = router;
