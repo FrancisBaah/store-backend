@@ -6,8 +6,10 @@ const router = require("./Routes/ProductsRoute");
 const errorHandler = require("./Middleware/ErrorHandler");
 const handleStipe = require("./Payment/StripePay");
 const PORT = process.env.PORT_NUMBER || 8000;
+const cookieParser = require("cookie-parser");
 
 const app = express();
+app.use(cookieParser());
 connectToDB();
 app.use(
   cors({
