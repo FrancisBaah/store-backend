@@ -90,6 +90,7 @@ const logoutUser = (req, res) => {
     secure: true, // Must be true if using SameSite=None
     sameSite: "None",
     expires: new Date(0), // Set the expiration to a past date to delete the cookie
+    path: "/",
   });
 
   res.status(200).json({ message: "Logged out successfully" });
